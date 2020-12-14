@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
 		features = "src/test/java/feature/googleSearchMulitpleCompanies.feature",
 		glue = {"stepdefinition"},
 		monochrome = true,
-		dryRun = false,
+		dryRun = true,
 		plugin= {"pretty","html:target/html_reports/html_reports.html","junit:target/junit_reports/junit_report.xml"
 				, "json:target/json_reports/json_reports.json"})
 public class TestRunner {

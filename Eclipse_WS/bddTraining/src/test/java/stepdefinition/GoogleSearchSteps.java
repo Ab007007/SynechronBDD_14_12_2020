@@ -47,7 +47,7 @@ public class GoogleSearchSteps {
 		System.out.println(" Click on Search Button");
 	}
 
-	@Then("Google will display search results")
+	@Then("Google will display search result(s)")
 	public void google_will_display_search_results() {
 	    // Write code here that turns the phrase above into concrete actions
 		List<WebElement> serachResults = driver.findElements(By.xpath("//h3//span"));
@@ -59,5 +59,19 @@ public class GoogleSearchSteps {
 		driver.close();
 		System.out.println("Displays Results");
 	}
+	
+	@When("user enters {int} in search box")
+	public void user_enters_in_search_box(Integer int1) {
+		driver.findElement(By.name("q")).sendKeys(int1.toString());
+	}
+
+	@Then("Google will display Exact \\({int} search results)")
+	public void google_will_display_exact_search_results(Integer int1) {
+	    System.out.println("Special characters are executed ");
+	    List<WebElement> serachResults = driver.findElements(By.xpath("//h3//span"));
+		System.out.println("Total search Results : " + serachResults.size());
+		
+	}
+
 
 }
