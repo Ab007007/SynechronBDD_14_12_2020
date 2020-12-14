@@ -25,10 +25,20 @@ public class GoogleSearchSteps {
 	   driver.get("https://www.google.com/");
 	}
 
-	@When("user enters Synechron in search box")
-	public void user_enters_synechron_in_search_box() {
-	    driver.findElement(By.name("q")).sendKeys("Synechron");
+	/*
+	 *BELOW CODE IS COMMENTED AS IT IS HANDLED IN - @When("user enters {string} in search box")
+	 * 
+	 * @When("user enters Synechron in search box") public void
+	 * user_enters_synechron_in_search_box() {
+	 * driver.findElement(By.name("q")).sendKeys("Synechron"); }
+	 */
+	
+	
+	@When("user enters {string} in search box")
+	public void user_enters_in_search_box(String companyName) {
+		driver.findElement(By.name("q")).sendKeys(companyName);
 	}
+
 
 	@When("click on search button")
 	public void click_on_search_button() {
