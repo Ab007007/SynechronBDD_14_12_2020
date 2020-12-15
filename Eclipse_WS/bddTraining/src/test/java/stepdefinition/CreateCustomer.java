@@ -255,15 +255,19 @@ public class CreateCustomer {
 	
 		act.click(driver.findElement(By.xpath("//div[@class='itemsContainer']//div[@class='title' and contains(text(),'"+ string +"')]/following-sibling::div")))
 		.perform();
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div/div[@class='actionButtonWrapper']"))));
+		
 	}
 
 	@When("user click on Action and delete")
-	public void user_click_on_action_and_delete() {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		WebElement ele = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div/div[@class='actionButtonWrapper']"))));
+	public void user_click_on_action_and_delete() throws InterruptedException {
+//		WebDriverWait wait = new WebDriverWait(driver, 20);
+//		WebElement ele = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div/div[@class='actionButtonWrapper']"))));
 		//ele.click();
-		Actions act = new Actions(driver);
-		act.click(ele).perform();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div")).click();;
+		
 		driver.findElement(By.xpath("//div[div[@class='customerNamePlaceHolder']]/following-sibling::div[@class='dropdownContainer actionsMenu']//div[text()='Delete']")).click();
 	
 	}
