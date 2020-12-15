@@ -1,5 +1,7 @@
+@featureScope
 Feature: Validate login functionality
 
+  @smoke1 @actitime1 
   Scenario Outline: Valid Login
     Given superuser is on login page
     When superuser enter <username> and <password>

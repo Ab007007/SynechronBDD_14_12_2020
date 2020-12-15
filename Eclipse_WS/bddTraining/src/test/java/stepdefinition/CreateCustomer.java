@@ -43,7 +43,7 @@ public class CreateCustomer {
 		driver.manage().window().maximize();
 	}
 	
-	@Before(order = 1)
+	@Before("@actitime")
 	public void login() {
 		driver.get("http://localhost/login.do");
 		driver.findElement(By.id("username")).sendKeys("admin");
@@ -58,7 +58,7 @@ public class CreateCustomer {
 	}
 	
 	
-	@After
+	@After("@actitime")
 	public void closeBrowser() {
 		driver.findElement(By.id("logoutLink")).click();
 		driver.close();
@@ -262,9 +262,6 @@ public class CreateCustomer {
 
 	@When("user click on Action and delete")
 	public void user_click_on_action_and_delete() throws InterruptedException {
-//		WebDriverWait wait = new WebDriverWait(driver, 20);
-//		WebElement ele = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div/div[@class='actionButtonWrapper']"))));
-		//ele.click();
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div")).click();;
 		
@@ -288,7 +285,24 @@ public class CreateCustomer {
 	}
 	
 	
-	
+	@Given("user creates a tag")
+	public void user_creates_a_tag() {
+	    // Write code here that turns the phrase above into concrete actions
+	    
+	}
+
+	@When("he want to execute selected scenarios")
+	public void he_want_to_execute_selected_scenarios() {
+	    // Write code here that turns the phrase above into concrete actions
+	    
+	}
+
+	@Then("only those selected will get executed")
+	public void only_those_selected_will_get_executed() {
+	    // Write code here that turns the phrase above into concrete actions
+	    
+	}
+
 	
 
 
