@@ -1,5 +1,7 @@
 package stepdefinition;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -10,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -83,6 +86,101 @@ public class CreateCustomer {
 	public void logout_from_the_application() {
 		driver.findElement(By.id("logoutLink")).click();
 		driver.close();
+	}
+	
+	
+	@When("User enters customername and customerdescription repeatedly to create mulitple customer")
+	public void user_enters_customername_and_customerdescription_repeatedly_to_create_mulitple_customer(DataTable dataTable) throws InterruptedException {
+		List<Map<String, String>> data = dataTable.asMaps();
+		String cn, cd ;
+		for( int i = 0; i < data.size() ; i++) {
+			
+			cn = data.get(i).get("customername");
+			cd = data.get(i).get("customerdesc");
+			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
+			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
+			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
+			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
+			driver.findElement(By.id("customerLightBox_commitBtn")).click();
+			
+			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+			System.out.println(successMsg.getText());
+			wait.until(ExpectedConditions.invisibilityOf(successMsg));
+			
+		}
+		
+	}
+
+	@When("User enters customername and customerdescription repeatedly as list to create mulitple customer")
+	public void user_enters_customername_and_customerdescription_repeatedly_as_list_to_create_mulitple_customer(DataTable dataTable) throws InterruptedException {
+		List<List<String>> data = dataTable.asLists();
+		String cn, cd ;
+		for( int i = 0; i < data.size() ; i++) {
+			
+			cn = data.get(i).get(0);
+			cd = data.get(i).get(1);
+			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
+			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
+			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
+			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
+			driver.findElement(By.id("customerLightBox_commitBtn")).click();
+			
+			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+			System.out.println(successMsg.getText());
+			wait.until(ExpectedConditions.invisibilityOf(successMsg));
+			
+		}
+		
+	}
+
+	@When("User enters customername and customerdescription as mapdata")
+	public void user_enters_customername_and_customerdescription_as_mapdata(DataTable dataTable) throws InterruptedException {
+		 Map<String, String> data = dataTable.asMap(String.class, String.class);
+			
+		 	System.out.println(data);
+		 	String customer_name_with_delimeter = data.get("customername");
+		 	String customer_desc_with_delimeter = data.get("customerdesc");
+		 	
+		 System.out.println(customer_name_with_delimeter);
+		 System.out.println(customer_desc_with_delimeter);
+		 	
+//			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
+//			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
+//			WebDriverWait wait = new WebDriverWait(driver, 20);
+//			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
+//			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
+//			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
+//			driver.findElement(By.id("customerLightBox_commitBtn")).click();
+//			
+//			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+//			System.out.println(successMsg.getText());
+//			wait.until(ExpectedConditions.invisibilityOf(successMsg));
+			
+	}
+
+	
+	@When("User enters customername and customerdescription as listdata")
+	public void user_enters_customername_and_customerdescription_as_listdata(DataTable dataTable) throws InterruptedException {
+			List<String> data = dataTable.asList();
+			
+			String cn = data.get(0);
+			String cd = data.get(1);
+			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
+			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
+			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
+			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
+			driver.findElement(By.id("customerLightBox_commitBtn")).click();
+			
+			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+			System.out.println(successMsg.getText());
+			wait.until(ExpectedConditions.invisibilityOf(successMsg));
+			
 	}
 
 }
