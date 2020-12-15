@@ -8,11 +8,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeStep;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,18 +25,54 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class CreateCustomer {
 
-	WebDriver driver = null;
-	@Given("User is loggedin to the actitime application using {string} and {string}")
-	public void user_is_loggedin_to_the_actitime_application_using_and(String un, String pwd) throws InterruptedException {
+	
+	@BeforeStep
+	public void stepInfo() {
+		System.out.println("*********************************************************");
+	}
+	
+	@AfterStep
+	public void stepEnd() {
+		System.out.println("----------------------------------------------------------");
+	}
+	@Before(order = 0)
+	public void setup() {
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
 		driver.manage().window().maximize();
+	}
+	
+	@Before(order = 1)
+	public void login() {
 		driver.get("http://localhost/login.do");
-		driver.findElement(By.id("username")).sendKeys(un);
-		driver.findElement(By.name("pwd")).sendKeys(pwd);
+		driver.findElement(By.id("username")).sendKeys("admin");
+		driver.findElement(By.name("pwd")).sendKeys("manager");
 		driver.findElement(By.id("loginButton")).click();
-		Thread.sleep(5000);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@After
+	public void closeBrowser() {
+		driver.findElement(By.id("logoutLink")).click();
+		driver.close();
+		driver = null;
+	}
+	
+	@Given("(u/U)ser is on dashboard page")
+	public void user_is_on_dashboard_page() {
+	    Assert.assertEquals(driver.getTitle(), "actiTIME - Enter Time-Track");
+	}
+	WebDriver driver = null;
+	@Given("User is loggedin to the actitime application using {string} and {string}")
+	public void user_is_loggedin_to_the_actitime_application_using_and(String un, String pwd) throws InterruptedException {
+		
 		
 	}
 
@@ -85,7 +126,7 @@ public class CreateCustomer {
 	@Then("logout from the application")
 	public void logout_from_the_application() {
 		driver.findElement(By.id("logoutLink")).click();
-		driver.close();
+//		driver.close();
 	}
 	
 	
@@ -118,7 +159,6 @@ public class CreateCustomer {
 		List<List<String>> data = dataTable.asLists();
 		String cn, cd ;
 		for( int i = 0; i < data.size() ; i++) {
-			
 			cn = data.get(i).get(0);
 			cd = data.get(i).get(1);
 			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
@@ -141,24 +181,21 @@ public class CreateCustomer {
 	public void user_enters_customername_and_customerdescription_as_mapdata(DataTable dataTable) throws InterruptedException {
 		 Map<String, String> data = dataTable.asMap(String.class, String.class);
 			
-		 	System.out.println(data);
-		 	String customer_name_with_delimeter = data.get("customername");
-		 	String customer_desc_with_delimeter = data.get("customerdesc");
+		 	System.out.println(data.keySet());
+		 	String cn = data.get("customerName");
+		 	String cd = data.get("customerDesc");
 		 	
-		 System.out.println(customer_name_with_delimeter);
-		 System.out.println(customer_desc_with_delimeter);
-		 	
-//			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
-//			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
-//			WebDriverWait wait = new WebDriverWait(driver, 20);
-//			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
-//			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
-//			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
-//			driver.findElement(By.id("customerLightBox_commitBtn")).click();
-//			
-//			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
-//			System.out.println(successMsg.getText());
-//			wait.until(ExpectedConditions.invisibilityOf(successMsg));
+			driver.findElement(By.xpath("//div[@class='addNewContainer']")).click();
+			driver.findElement(By.xpath("//div[contains(text(),'New Customer')]")).click();
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("customerLightBox_nameField"))));
+			driver.findElement(By.id("customerLightBox_nameField")).sendKeys(cn);
+			driver.findElement(By.id("customerLightBox_descriptionField")).sendKeys(cd);
+			driver.findElement(By.id("customerLightBox_commitBtn")).click();
+			
+			WebElement successMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+			System.out.println(successMsg.getText());
+			wait.until(ExpectedConditions.invisibilityOf(successMsg));
 			
 	}
 
@@ -182,5 +219,73 @@ public class CreateCustomer {
 			wait.until(ExpectedConditions.invisibilityOf(successMsg));
 			
 	}
+	
+	
+	///--------------------------Delete customer --------------------
+	
+
+
+	@When("user search for the customer {string}")
+	public void user_search_for_the_customer(String string) {
+	    driver.findElement
+	    (By.xpath("//div[@class='customersProjectsPanel']//input[@placeholder='Start typing name ...']")).sendKeys(string);
+	}
+
+	@Then("customer with {string} should be displayed")
+	public void customer_with_usersearch_should_be_displayed(String cn) {
+	  
+		int serachCount = driver.findElements(By.xpath("//div[@class='itemsContainer']//div[@class='title' and contains(text(),'"+ cn +"')]")).size();
+	
+		if(serachCount >=1) {
+			Assert.assertTrue(true);
+		}
+		else
+		{
+			Assert.assertFalse(true);
+		}
+	
+	}
+
+	@When("user moves the mouse on the gear icon next to {string} and click on it")
+	public void user_moves_the_mouse_on_the_gear_icon_next_to_and_click_on_it(String string) {
+		Actions act = new Actions(driver);
+		act.moveToElement
+		(driver.findElement(By.xpath("//div[@class='itemsContainer']//div[@class='title' and contains(text(),'"+ string +"')]")))
+		.perform();
+	
+		act.click(driver.findElement(By.xpath("//div[@class='itemsContainer']//div[@class='title' and contains(text(),'"+ string +"')]/following-sibling::div")))
+		.perform();
+	}
+
+	@When("user click on Action and delete")
+	public void user_click_on_action_and_delete() {
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		WebElement ele = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='customerNamePlaceHolder']/following-sibling::div/div[@class='actionButtonWrapper']"))));
+		//ele.click();
+		Actions act = new Actions(driver);
+		act.click(ele).perform();
+		driver.findElement(By.xpath("//div[div[@class='customerNamePlaceHolder']]/following-sibling::div[@class='dropdownContainer actionsMenu']//div[text()='Delete']")).click();
+	
+	}
+
+	@When("click on delete permanently")
+	public void click_on_delete_permanently() {
+		driver.findElement(By.id("customerPanel_deleteConfirm_submitTitle")).click();
+	
+	}
+
+	@Then("user validates the customer deletion")
+	public void user_validates_the_customer_deletion() {
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		
+		WebElement deletionMsg = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='toast']"))));
+		System.out.println(deletionMsg.getText());
+		wait.until(ExpectedConditions.invisibilityOf(deletionMsg));
+	}
+	
+	
+	
+	
+
 
 }
