@@ -1,3 +1,4 @@
+
 Feature: Validate login functionality
 
   @smoke @actitime @regression

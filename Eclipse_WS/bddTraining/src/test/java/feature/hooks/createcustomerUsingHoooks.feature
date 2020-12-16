@@ -1,3 +1,4 @@
+@actiregression
 Feature: create customer
 
   Scenario: Create Customer using hooks

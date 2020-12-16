@@ -1,6 +1,6 @@
 Feature: Dummy Feature to demonstrate tags
 
-	@smoke
+	@smoke1
   Scenario: Test Tags1
     Given user creates a tag
     When he want to execute selected scenarios
@@ -12,7 +12,7 @@ Feature: Dummy Feature to demonstrate tags
     When he want to execute selected scenarios
     Then only those selected will get executed
 
-	@regression
+	@regression1
   Scenario: Test Tags3
     Given user creates a tag
     When he want to execute selected scenarios

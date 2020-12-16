@@ -1,13 +1,20 @@
 package stepdefinition;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,6 +23,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class GoogleSearchSteps {
 
 	WebDriver driver = null;
+	private File ss;
 	@Given("user is on google page")
 	public void user_is_on_google_page() {
 	   WebDriverManager.chromedriver().setup();
@@ -56,7 +64,9 @@ public class GoogleSearchSteps {
 		for (WebElement result : serachResults) {
 			System.out.println(result.getText());
 		}
+		org.junit.Assert.assertFalse(true);
 		driver.close();
+		
 		System.out.println("Displays Results");
 	}
 	
@@ -72,6 +82,15 @@ public class GoogleSearchSteps {
 		System.out.println("Total search Results : " + serachResults.size());
 		
 	}
-
+	/*
+	 * @After public void tearDown(Scenario sc) throws IOException {
+	 * System.out.println("______________________________" + sc.getName());
+	 * if(sc.isFailed()) { TakesScreenshot ts = (TakesScreenshot)driver; // byte[]
+	 * screenshot = ts.getScreenshotAs(OutputType.BYTES); // sc.embed(screenshot,
+	 * "image/png"); ss = ts.getScreenshotAs(OutputType.FILE); // sc.embed(ss ,
+	 * "image/png"); FileUtils.copyFile(ss, new File("ss/ss.png")); }
+	 * 
+	 * }
+	 */
 
 }
